@@ -6,7 +6,6 @@ class Process:
         self.burst_time = burst_time
         self.pid = pid
         self.completion_time = 0
-        self.turnaround_time = 0
         self.waiting_time = 0
         self.response_time = 0
         self.return_time = 0

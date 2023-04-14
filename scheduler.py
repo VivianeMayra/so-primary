@@ -1,7 +1,7 @@
 from copy import copy
 from math import ceil
 
-quanta = 3
+quanta = 3000
 context_switch_time = 1
 
 cpu_scheduling = []
@@ -44,16 +44,16 @@ def scheduler(process_list):
 
 def throughput():
     total_timeline = scheduling_ends[-1]
-    middle_timeline =  ceil(total_timeline/2)
-    
+    middle_timeline = ceil(total_timeline/2)
+
     first_half = []
     second_half = []
-    
+
     for tuple in finalized_processes:
-        
+
         process = tuple[0]
         finalization_time = tuple[1]
-        
+
         if finalization_time <= middle_timeline:
             first_half.append(process)
         else:
@@ -86,9 +86,9 @@ def first_process_occurrence_in_scheduling(pid):
 
 def set_all_times(process_list):
     completion_times(process_list)
+    return_times(process_list)
     waiting_times(process_list)
     response_times(process_list)
-    return_times(process_list)
 
 
 def completion_times(process_list):
@@ -99,9 +99,15 @@ def completion_times(process_list):
         process.set_turnaround_time(tt=ct)
 
 
+def return_times(process_list):
+    for process in process_list:
+        rt = process.completion_time
+        process.set_return_time(rt)
+
+
 def waiting_times(process_list):
     for process in process_list:
-        wt = process.turnaround_time - process.initial_burst_time
+        wt = process.return_time - process.initial_burst_time
         process.set_waiting_time(wt)
 
 
@@ -110,9 +116,3 @@ def response_times(process_list):
         i = first_process_occurrence_in_scheduling(process.pid)
         rt = scheduling_starts[i]
         process.set_response_time(rt)
-
-
-def return_times(process_list):
-    for process in process_list:
-        rt = process.completion_time - process.response_time
-        process.set_return_time(rt)
